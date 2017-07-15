@@ -68,7 +68,7 @@ feature "Customer Search" do
     end
     within "section.search-results" do
       expect(page).to have_content("Results")
-      expect(page.all("ol li.list-group-item").count).to eq(4)
+      expect(page.all( "ol li.list-group-item" ).count).to eq(4)
 
       list_group_items = page.all("ol li.list-group-item")
 
