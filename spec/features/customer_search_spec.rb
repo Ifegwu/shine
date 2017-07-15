@@ -8,10 +8,30 @@
 #---
 require 'rails_helper'
 
-
 feature "Customer Search" do
 
   # setup and tests will go here...
+
+
+  def create_test_user(email: , password: )
+    User.create!(
+      email: email,
+      password: password,
+      password_confirmation: password)
+  end
+
+  def create_customer(first_name:, last_name:, email: nil)
+    username = "#{Faker::Internet.user_name}#{rand(1000)}"
+    email  ||= "#{username}#{rand(1000)}@" +
+                 "#{Faker::Internet.domain_name}"
+
+    Customer.create!(
+      first_name: first_name,
+      last_name: last_name,
+      username: username,
+      email: email
+    )
+  end
 
   let(:email)    { "pat@example.com" }
   let(:password) { "password123" }
@@ -30,7 +50,7 @@ feature "Customer Search" do
                     email: "pat123@somewhere.net"
   end
 
-  scenario "Search by Name" do
+  scenario "Search by Name"do
     visit "/customers"
 
     # Login to get access to /customers
@@ -54,7 +74,6 @@ feature "Customer Search" do
       expect(list_group_items[3]).to have_content("Pat")
     end
   end
-
   scenario "Search by Email" do
     visit "/customers"
 
@@ -68,7 +87,7 @@ feature "Customer Search" do
     end
     within "section.search-results" do
       expect(page).to have_content("Results")
-      expect(page.all( "ol li.list-group-item" ).count).to eq(4)
+      expect(page.all("ol li.list-group-item").count).to eq(4)
 
       list_group_items = page.all("ol li.list-group-item")
 
@@ -81,23 +100,4 @@ feature "Customer Search" do
     end
   end
 
-end
-def create_test_user(email:, password: )
-  User.create!(
-    email: email,
-    password: password,
-    password_confirmation: password)
-end
-
-def create_customer(first_name:, last_name:, email: nil)
-  username = "#{Faker::Internet.user_name}#{rand(1000)}"
-  email  ||= "#{username}#{rand(1000)}@" +
-               "#{Faker::Internet.domain_name}"
-
-  Customer.create!(
-    first_name: first_name,
-    last_name: last_name,
-    username: username,
-    email: email
-  )
 end

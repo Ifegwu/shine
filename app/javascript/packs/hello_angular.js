@@ -3,5 +3,5 @@
 // <hello-angular>Loading...</hello-angular>
 //
 // <%= javascript_pack_tag 'hello_angular' %>
-
+import "polyfills";
 require('../hello_angular')
