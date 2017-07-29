@@ -4,7 +4,10 @@ Rails.application.routes.draw do
   root to: "dashboard#index"
   #These supercede other /customers routes, so must
   #come before resource :customers
-  get "customers/ng", to: "customers#ng"
-  get "customer/ng/*angular_route", to: "customers#ng"
-  resources :customers, only: [ :index ]
+  get "customers/ng",               to: "customers#ng"
+  get "customers/ng/*angular_route", to: "customers#ng"
+  get "cusomers/ng/customer", to: "customers#ng"
+  #resources :customers, only: [ :index, :show, :update, :create, :delete ]
+  resources :customers
+  get "credit_card_info/:id", to: "fake_payment_processor#show"
 end

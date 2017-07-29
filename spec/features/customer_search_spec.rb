@@ -9,10 +9,6 @@
 require 'rails_helper'
 
 feature "Customer Search" do
-
-  # setup and tests will go here...
-
-
   def create_test_user(email: , password: )
     User.create!(
       email: email,
@@ -25,12 +21,29 @@ feature "Customer Search" do
     email  ||= "#{username}#{rand(1000)}@" +
                  "#{Faker::Internet.domain_name}"
 
-    Customer.create!(
+    customer = Customer.create!(
       first_name: first_name,
       last_name: last_name,
       username: username,
       email: email
     )
+
+    customer.create_customers_billing_address(address: create_address)
+    customer.customers_shipping_address.create!(address: create_address,
+                                                primary: true)
+    customer
+  end
+
+  def create_address
+    state = State.find_or_create_by!(
+      code: Faker::Address.state_abbr,
+      name: Faker::Address.state)
+
+    Address.create!(
+      street: Faker::Address.street_address,
+      city: Faker::Address.city,
+      state: state,
+      zipcode: Faker::Address.zip)
   end
 
   let(:email)    { "pat@example.com" }
@@ -74,6 +87,7 @@ feature "Customer Search" do
       expect(list_group_items[3]).to have_content("Pat")
     end
   end
+
   scenario "Search by Email" do
     visit "/customers"
 
@@ -97,7 +111,16 @@ feature "Customer Search" do
       expect(list_group_items[1]).to have_content("Dobbs")
       expect(list_group_items[3]).to have_content("I.T.")
       expect(list_group_items[3]).to have_content("Pat")
+      puts "page.html"
+    end
+    click_on "View Details...", match: :first
+
+    customer = Customer.find_by!(email: "pat123@somewhere.net")
+    within "section.customer-details" do
+      expect(page).to have_selector("[ng-reflect-model='#{customer.last_name}']")
+      expect(page).to have_selector("[ng-reflect-model='#{customer.first_name}']")
+      expect(page).to have_selector("[ng-reflect-model='#{customer.email}']")
+      expect(page).to have_selector("[ng-reflect-model='#{customer.username}']")
     end
   end
-
 end

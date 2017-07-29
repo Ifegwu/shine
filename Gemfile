@@ -12,6 +12,7 @@ gem 'webpacker', '~> 2.0'
 gem 'foreman'
 gem 'devise'
 gem 'faker'
+gem 'angular_rails_csrf'
 
 # Use postgresql as the database for Active Record
 gem 'pg', '~> 0.21.0'

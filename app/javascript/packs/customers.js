@@ -1,22 +1,19 @@
-/***
- * Excerpted from "Rails, Angular, Postgres, and Bootstrap, Second Edition",
- * published by The Pragmatic Bookshelf.
- * Copyrights apply to this code. It may not be used to create training material,
- * courses, books, articles, and the like. Contact us if you are in doubt.
- * We make no guarantees that this code is fit for any purpose.
- * Visit http://www.pragmaticprogrammer.com/titles/dcbang2 for more book information.
-***/
 import "polyfills";
 
 import { Component, NgModule    } from "@angular/core";
 import { BrowserModule          } from "@angular/platform-browser";
-import { FormsModule            } from "@angular/forms";
 import { platformBrowserDynamic } from "@angular/platform-browser-dynamic";
 import { HttpModule             } from "@angular/http";
 import { RouterModule           } from "@angular/router";
+import { FormsModule            } from "@angular/forms";
 
-import { CustomerSearchComponent } from "CustomerSearchComponent";
+import { CustomerSearchComponent  } from "CustomerSearchComponent";
 import { CustomerDetailsComponent } from "CustomerDetailsComponent";
+import { CustomerInfoComponent    } from "CustomerDetailsComponent/CustomerInfoComponent";
+import { CreditCardComponent      } from "CustomerDetailsComponent/CreditCardComponent";
+import { AddressComponent         } from "CustomerDetailsComponent/AddressComponent";
+import { TextFieldComponent       } from "TextFieldComponent";
+import { CreateCustomerComponent  } from "CreateCustomerComponent";
 
 var AppComponent = Component({
   selector: "shine-customers-app",
@@ -65,19 +62,29 @@ var RESULTS = [
   },
 ];
 
+
 var routing = RouterModule.forRoot(
-  [
-    {
-      path: "",
-      component: CustomerSearchComponent
-    },
-    {
-      path: ":id",
-      component: CustomerDetailsComponent
-    }
-  ]);
+[
+  {
+    path: "",
+    component: CustomerSearchComponent
+    //redirectTo: 'customers',
+    //pathMatch: 'full'
+  },
+  {
+    path: ":id",
+    component: CustomerDetailsComponent
+  },
+  {
+    path: "customer",
+    component: CreateCustomerComponent
+  }
+]);
 
 var CustomerAppModule = NgModule({
+
+  // rest of the code...
+
   imports:      [
     BrowserModule,
     FormsModule,
@@ -87,10 +94,16 @@ var CustomerAppModule = NgModule({
   declarations: [
     CustomerSearchComponent,
     CustomerDetailsComponent,
-    AppComponent
+    CustomerInfoComponent,
+    AddressComponent,
+    CreditCardComponent,
+    CreateCustomerComponent,
+    AppComponent,
+    TextFieldComponent,
   ],
-  bootstrap:    [ AppComponent ]
-}).Class({
+  bootstrap: [ AppComponent ]
+})
+.Class({
   constructor: function() {}
 });
 
